@@ -8,7 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useEffect } from 'react';
 
 
-const columns = Object.keys(data[0])
+
 
 function App() {
   const [search, setSearch] = useState('');
