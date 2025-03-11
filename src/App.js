@@ -4,25 +4,27 @@ import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { data } from './data.js'
+//import { data } from './data.js'
+import { useEffect, useState } from 'react';
+
 
 const columns = Object.keys(data[0])
 
 function App() {
-  
   const [search, setSearch] = useState('');
-  //console.log(data)
-  // const sortName = () => {
-  //   setContacts(
-  //     data.sort((a, b) => {
-  //       return a.first_name.toLowerCase() < a.first_name.toLowerCase()
-  //         ? -1
-  //         : a.first_name.toLowerCase() > a.first_name.toLowerCase()
-  //         ? 1
-  //         : 0;
-  //     })
-  //   );
-  // };
+  const [data, setData] = useState([]); // Store fetched data
+  const [columns, setColumns] = useState([]); // Store column names
+
+  useEffect(() => {
+    // Fetch data from Azure Web App API
+    fetch('https://boxtracking-webapp.azurewebsites.net/api/data')
+      .then((response) => response.json())
+      .then((json) => {
+        setData(json);
+        setColumns(Object.keys(json[0] || {})); // Set column names dynamically
+      })
+      .catch((error) => console.error('Error fetching data:', error));
+  }, []);
 
   return (
     <div>
@@ -30,8 +32,6 @@ function App() {
         <h1 className='text-center mt-4'>Contact Keeper</h1>
         <Form>
           <InputGroup className='my-3'>
-
-            {/* onChange for search */}
             <Form.Control
               onChange={(e) => setSearch(e.target.value)}
               placeholder='Search contacts'
@@ -41,22 +41,19 @@ function App() {
         <Table striped bordered hover>
           <thead>
             <tr>
-              {columns.map((col, index)=>(<th key={index}>{col}</th>))}
-              
+              {columns.map((col, index) => (<th key={index}>{col}</th>))}
             </tr>
           </thead>
           <tbody>
             {data
-             .slice(0,20)
+              .slice(0, 20)
               .filter((item) => {
                 return search.toLowerCase() === ''
-                  || columns.some(col=>item[col].toLowerCase().includes(search.toLocaleLowerCase()));
+                  || columns.some(col => item[col]?.toString().toLowerCase().includes(search.toLowerCase()));
               })
-              
               .map((item, index) => (
                 <tr key={index}>
-                  {columns.map((col,colIndex)=>(<td key={colIndex}>{item[col]}</td>))}
-                 
+                  {columns.map((col, colIndex) => (<td key={colIndex}>{item[col]}</td>))}
                 </tr>
               ))}
           </tbody>
