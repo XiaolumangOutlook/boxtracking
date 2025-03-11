@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import 'bootstrap/dist/css/bootstrap.min.css';
 //import { data } from './data.js'
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 
 const columns = Object.keys(data[0])
