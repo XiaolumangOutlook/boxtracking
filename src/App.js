@@ -16,8 +16,9 @@ function App() {
   const [columns, setColumns] = useState([]); // Store column names
 
   useEffect(() => {
+    
     // Fetch data from Azure Web App API
-    fetch('https://boxtracking-webapp.azurewebsites.net/api/data')
+    fetch('https://boxtrackingfinal2.azurewebsites.net/api/data')
       .then((response) => response.json())
       .then((json) => {
         setData(json);
