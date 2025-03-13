@@ -7,8 +7,33 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 //import { data } from './data.js'
 import { useEffect } from 'react';
 
+import { MsalProvider, useMsal } from "@azure/msal-react";
+import { msalInstance } from "./authConfig";
 
+const AutoLogin = () => {
+  const { instance, accounts } = useMsal();
+  const [user, setUser] = useState(null);
 
+  useEffect(() => {
+    const silentLogin = async () => {
+      try {
+        if (accounts.length === 0) {
+          const response = await instance.loginRedirect({
+            scopes: ["openid", "profile", "email"],
+          });
+          setUser(response.account);
+        }
+      } catch (error) {
+        console.error("Silent login failed, redirecting to login...", error);
+        instance.loginRedirect();
+      }
+    };
+
+    silentLogin();
+  }, [instance, accounts]);
+
+  return user ? <p>Welcome, {user.name}</p> : <p>Logging in...</p>;
+};
 
 function App() {
   const [search, setSearch] = useState('');
