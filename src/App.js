@@ -18,7 +18,7 @@ function App() {
   useEffect(() => {
     
     // Fetch data from Azure Web App API
-    fetch('https://boxtrackingfinal2.azurewebsites.net/api/data')
+     fetch('https://boxtracking-backend-a0aec7e0emh6dwet.canadacentral-01.azurewebsites.net/api/data')
       .then((response) => response.json())
       .then((json) => {
         setData(json);
